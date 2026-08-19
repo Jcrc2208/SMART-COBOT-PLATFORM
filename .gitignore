@@ -1,0 +1,11 @@
+#ignorar variables de entorno locales y archivos de configuración sensibles
+
+#ingorar carpeta test
+test/
+
+#ignorar archivos de configuración de IDE
+.vscode/
+
+#ignorar archivo .env
+.env
+
