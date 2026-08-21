@@ -1,0 +1,263 @@
+.login-menu {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 8px 8px 24px;
+  border-radius: 999px;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.04)
+  );
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.menu-links {
+  display: flex;
+  gap: 22px;
+}
+
+.menu-links a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 999px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu-links a:hover {
+  color: #fff;
+}
+
+.menu-links a.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.menu-login {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu-login:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-login.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 520px) {
+  .login-menu {
+    top: 12px;
+    gap: 12px;
+    padding: 8px 12px;
+    width: calc(100% - 24px);
+    max-width: 400px;
+    justify-content: center;
+  }
+
+  .menu-links {
+    gap: 14px;
+  }
+
+  .menu-links a {
+    font-size: 13px;
+  }
+
+  .menu-login {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}
+
+.login-scroll {
+  background: #000;
+  color: #f5f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Inter, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.scene {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5vw;
+}
+
+.frame-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sticker {
+  opacity: 0;
+  visibility: hidden;
+  text-align: center;
+  width: 100%;
+}
+
+.sticker p {
+  margin: 0 auto;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #fff;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.sticker-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14vh;
+  width: 100%;
+  max-width: 80vw;
+  margin: 0 auto;
+}
+
+@media (max-width: 520px) {
+  .sticker-stack {
+    width: 100%;
+    max-width: 88vw;
+  }
+
+  .sticker p {
+    font-size: 1rem;
+    padding: 8px 14px;
+  }
+}
+
+.frame-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text-stack {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 0 8vw;
+}
+
+.text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.block-tag {
+  font-size: 13px;
+  letter-spacing: 0.35em;
+  color: #fff;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.text-block h1 {
+  font-weight: 500;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  max-width: 20ch;
+}
+
+.block-text {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #86868b;
+  max-width: 52ch;
+}
+
+.scroll-space {
+  height: 500vh;
+}
+
+.login-zone {
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  padding: 48px 8vw;
+}
+
+.login-zone h1 {
+  font-weight: 500;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+}
+
+.login-zone .block-tag {
+  color: #fff;
+}
+
+.login-hint {
+  color: #86868b;
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
