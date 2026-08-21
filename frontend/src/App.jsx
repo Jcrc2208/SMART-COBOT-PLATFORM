@@ -2,6 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './hooks/useAuth.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import ChatPage from './pages/ChatPage.jsx'
+import Perfil from './components/Perfil.jsx'
+import Coleccion from './components/Coleccion.jsx'
+import Crear from './components/Crear.jsx'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -21,7 +24,12 @@ function App() {
               <ChatPage />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<Navigate to="/perfil" replace />} />
+          <Route path="perfil" element={<Perfil />} />
+          <Route path="coleccion" element={<Coleccion />} />
+          <Route path="crear" element={<Crear />} />
+        </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AuthProvider>

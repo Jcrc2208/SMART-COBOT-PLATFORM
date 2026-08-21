@@ -26,9 +26,9 @@ const STICKER_COUNT = STICKERS.length
 
 const STEPS = [
   { title: 'Diagnóstico', text: 'Platica con el chatbot sobre tus gustos y define tu perfil olfativo.' },
-  { title: 'Receta Única', text: 'La IA procesa tus datos y crea tu fórmula personalizada.' },
+  { title: 'Receta única', text: 'La IA procesa tus datos y crea tu fórmula personalizada.' },
   { title: 'Mezcla ', text: 'El robot colaborativo recibe la fórmula y prepara tu perfume al instante.' },
-  { title: 'Tu Aroma Listo', text: 'Envasamos tu fragancia única y te la entregamos.' },
+  { title: 'Tu aroma listo', text: 'Envasamos tu fragancia única y te la entregamos.' },
 ]
 
 export default function LoginPage() {
