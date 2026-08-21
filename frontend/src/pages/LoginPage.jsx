@@ -24,6 +24,13 @@ const STICKERS = [
 ]
 const STICKER_COUNT = STICKERS.length
 
+const STEPS = [
+  { title: 'Diagnóstico', text: 'Platica con el chatbot sobre tus gustos y define tu perfil olfativo.' },
+  { title: 'Receta Única', text: 'La IA procesa tus datos y crea tu fórmula personalizada.' },
+  { title: 'Mezcla ', text: 'El robot colaborativo recibe la fórmula y prepara tu perfume al instante.' },
+  { title: 'Tu Aroma Listo', text: 'Envasamos tu fragancia única y te la entregamos.' },
+]
+
 export default function LoginPage() {
   const { user } = useAuth()
   const [active, setActive] = useState('inicio')
@@ -32,14 +39,70 @@ export default function LoginPage() {
   const frameRef = useRef(null)
   const stickerRefs = useRef([])
   const loginTitleRef = useRef(null)
+  const stepRefs = useRef([])
 
   useEffect(() => {
-    gsap.to(loginTitleRef.current, {
-      text: 'Tu perfume, en vivo',
+    const ctx = gsap.context(() => {
+      stepRefs.current.forEach((el, i) => {
+        if (!el) return
+        gsap.fromTo(
+          el,
+          { x: i % 2 ? 80 : -80, autoAlpha: 0 },
+          {
+            x: 0,
+            autoAlpha: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 90%',
+              end: 'top 55%',
+              scrub: true,
+            },
+          }
+        )
+      })
+    })
+    const t = setTimeout(() => ScrollTrigger.refresh(), 300)
+    return () => {
+      ctx.revert()
+      clearTimeout(t)
+    }
+  }, [])
+
+  useEffect(() => {
+    const tween = gsap.to(loginTitleRef.current, {
+      text: 'Crea tu aroma, único como tú.',
       duration: 2,
       ease: 'power1.out',
-      delay: 1,
+      paused: true,
     })
+    const st = ScrollTrigger.create({
+      trigger: loginTitleRef.current,
+      start: 'top 85%',
+      onEnter: () => tween.restart(),
+      onEnterBack: () => tween.restart(),
+    })
+    return () => {
+      st.kill()
+      tween.kill()
+    }
+  }, [])
+
+  useEffect(() => {
+    const zones = [
+      { trigger: spaceRef.current, name: 'inicio', start: 'top top', end: 'bottom 50%' },
+      { trigger: '.how-zone', name: 'descubre', start: 'top 50%', end: 'bottom 50%' },
+      { trigger: '.login-zone', name: 'login', start: 'top 50%', end: 'bottom top' },
+    ]
+    const sts = zones.map(({ trigger, name, start, end }) =>
+      ScrollTrigger.create({
+        trigger,
+        start,
+        end,
+        onToggle: (self) => self.isActive && setActive(name),
+      })
+    )
+    return () => sts.forEach((st) => st.kill())
   }, [])
 
   useEffect(() => {
@@ -77,7 +140,8 @@ STICKERS.forEach((s, i) => {
 
   if (user) return <Navigate to="/" replace />
 
-  const scrollToLogin = () => {
+  const scrollToLogin = (e) => {
+    e.preventDefault()
     setActive('login')
     document.querySelector('.login-zone')?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -88,9 +152,10 @@ STICKERS.forEach((s, i) => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const goContacto = (e) => {
+  const goDescubre = (e) => {
     e.preventDefault()
-    setActive('contacto')
+    setActive('descubre')
+    document.querySelector('.how-zone')?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -98,10 +163,10 @@ STICKERS.forEach((s, i) => {
       <header className="login-menu">
         <nav className="menu-links">
           <a href="#" className={active === 'inicio' ? 'active' : ''} onClick={scrollToTop}>Inicio</a>
-          <a href="#" className={active === 'contacto' ? 'active' : ''} onClick={goContacto}>Contacto</a>
+          <a href="#" className={active === 'descubre' ? 'active' : ''} onClick={goDescubre}>Descubre</a>
         </nav>
         <a href="#" className={active === 'login' ? 'menu-login active' : 'menu-login'} onClick={scrollToLogin}>
-          Iniciar sesión
+          Empecemos
         </a>
       </header>
       <div className="scroll-space" ref={spaceRef}>
@@ -114,6 +179,23 @@ STICKERS.forEach((s, i) => {
           </div>
         </div>
       </div>
+
+      <section className="how-zone">
+        <p className="block-tag">Descubre</p>
+        <h2 className="how-title">¿Cómo funciona?</h2>
+        <div className="how-steps">
+          {STEPS.map((s, i) => (
+            <div
+              key={i}
+              className={`step ${i % 2 ? 'right' : 'left'}`}
+              ref={(el) => (stepRefs.current[i] = el)}
+            >
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="login-zone">
         <p className="block-tag">Empecemos</p>

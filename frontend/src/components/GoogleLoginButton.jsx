@@ -45,5 +45,19 @@ export default function GoogleLoginButton() {
     }
   }, [])
 
-  return <div ref={ref} />
+  const handleDevLogin = () => {
+    login({ name: 'Dev User', email: 'dev@local.test', picture: '' }, 'dev-token')
+    navigate('/')
+  }
+
+  return (
+    <>
+      <div ref={ref} />
+      {import.meta.env.DEV && (
+        <button className="dev-login-btn" onClick={handleDevLogin}>
+          Entrar en modo dev
+        </button>
+      )}
+    </>
+  )
 }
