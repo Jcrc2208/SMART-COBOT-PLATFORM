@@ -2,10 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import './crear.css'
 
 const INITIAL_MESSAGES = [
-  { from: 'bot', text: '¡Hola! Soy tu asistente de fragancias. Cuéntame qué aromas te gustan y creo tu perfume único.' },
+  { from: 'bot', text: '¡Hola! Soy tu asistente de fragancias Fragance Bar. ¿Estas listo para comenzar?' },
 ]
-
-const SUGGESTIONS = ['Algo fresco y cítrico', 'Dulce para la noche', 'Notas amaderadas']
 
 export default function Crear() {
   const [messages, setMessages] = useState(INITIAL_MESSAGES)
@@ -32,7 +30,7 @@ export default function Crear() {
         <header className="chat-topbar">
           <div className="chat-bot-avatar">IA</div>
           <div>
-            <p className="chat-bot-name">Asistente de Fragancias</p>
+            <p className="chat-bot-name">Asistente Fragance Bar</p>
             <p className="chat-bot-status"><span className="dot" /> En línea</p>
           </div>
         </header>
@@ -44,15 +42,6 @@ export default function Crear() {
             </div>
           ))}
         </div>
-
-        <div className="chip-row chat-suggestions">
-          {SUGGESTIONS.map((s) => (
-            <button key={s} type="button" className="chip chip-btn" onClick={() => send(s)}>
-              {s}
-            </button>
-          ))}
-        </div>
-
         <form
           className="chat-inputbar"
           onSubmit={(e) => {
