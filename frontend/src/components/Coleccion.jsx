@@ -1,12 +1,4 @@
-import { useMemo, useState } from 'react'
-import {
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  ResponsiveContainer,
-} from 'recharts'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './coleccion.css'
 
 const COLECCION = [
@@ -45,7 +37,7 @@ const COLECCION = [
   },
 ]
 
-const RADAR_EJES = [
+const NOTAS_PERFIL = [
   { nota: 'Frescura', nivel: 85 },
   { nota: 'Dulce', nivel: 55 },
   { nota: 'Especiado', nivel: 40 },
@@ -74,25 +66,38 @@ function nivelDe(total) {
   return { ...actual, siguiente, progreso }
 }
 
-function RadarNotas() {
+function PerfilNotas() {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => e.isIntersecting && (setVisible(true), obs.disconnect()),
+      { threshold: 0.3 }
+    )
+    if (ref.current) obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [])
+
   return (
-    <div className="radar-wrap">
-      <ResponsiveContainer width="100%" height={280}>
-        <RadarChart data={RADAR_EJES} outerRadius="72%">
-          <PolarGrid stroke="rgba(255,255,255,0.16)" />
-          <PolarAngleAxis dataKey="nota" tick={{ fill: '#a8a8ad', fontSize: 12 }} />
-          <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
-          <Radar
-            dataKey="nivel"
-            stroke="#e8cf9e"
-            strokeWidth={2}
-            fill="#c9a96e"
-            fillOpacity={0.35}
-            dot={{ r: 3, fill: '#f5e2b8', strokeWidth: 0 }}
-            isAnimationActive
-          />
-        </RadarChart>
-      </ResponsiveContainer>
+    <div className="perfil-wrap" ref={ref}>
+      {NOTAS_PERFIL.map((n, i) => (
+        <div key={n.nota} className="perfil-row">
+          <span className="perfil-nombre">{n.nota}</span>
+          <div className="perfil-track">
+            <div
+              className={`perfil-fill ${visible ? 'on' : ''}`}
+              style={{ width: visible ? `${n.nivel}%` : 0, transitionDelay: `${i * 90}ms` }}
+            />
+            <div
+              className={`perfil-dot ${visible ? 'on' : ''}`}
+              style={{ left: visible ? `${n.nivel}%` : 0, transitionDelay: `${i * 90 + 250}ms` }}
+            >
+              <span className="perfil-pct">{n.nivel}%</span>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -206,8 +211,8 @@ export default function Coleccion() {
       </section>
 
       <section className="section-card">
-        <h3>Radar de notas</h3>
-        <RadarNotas />
+        <h3>Perfil de notas</h3>
+        <PerfilNotas />
       </section>
     </main>
   )
