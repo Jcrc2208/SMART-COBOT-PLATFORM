@@ -161,6 +161,58 @@
   gap: 10px;
 }
 
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.shortcut-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  color: #f5f5f7;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.shortcut-tile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 169, 110, 0.55);
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.16), rgba(201, 169, 110, 0.05));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.shortcut-icon {
+  width: 26px;
+  height: 26px;
+  margin-bottom: 8px;
+  color: #c9a96e;
+}
+
+.shortcut-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #f5e2b8;
+}
+
+.shortcut-desc {
+  font-size: 0.78rem;
+  color: #86868b;
+}
+
 .btn-primary,
 .btn-ghost {
   min-height: 46px;
@@ -207,6 +259,10 @@
   .btn-primary,
   .btn-ghost {
     width: 100%;
+  }
+
+  .shortcuts-grid {
+    grid-template-columns: 1fr;
   }
 }
 
