@@ -66,6 +66,8 @@ function nivelDe(total) {
   return { ...actual, siguiente, progreso }
 }
 
+const TICKS = 28
+
 function PerfilNotas() {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
@@ -81,23 +83,33 @@ function PerfilNotas() {
 
   return (
     <div className="perfil-wrap" ref={ref}>
-      {NOTAS_PERFIL.map((n, i) => (
-        <div key={n.nota} className="perfil-row">
-          <span className="perfil-nombre">{n.nota}</span>
-          <div className="perfil-track">
-            <div
-              className={`perfil-fill ${visible ? 'on' : ''}`}
-              style={{ width: visible ? `${n.nivel}%` : 0, transitionDelay: `${i * 90}ms` }}
-            />
-            <div
-              className={`perfil-dot ${visible ? 'on' : ''}`}
-              style={{ left: visible ? `${n.nivel}%` : 0, transitionDelay: `${i * 90 + 250}ms` }}
-            >
-              <span className="perfil-pct">{n.nivel}%</span>
+      <p className="perf-sheet-title">Ficha olfativa</p>
+
+      {NOTAS_PERFIL.map((n, i) => {
+        const activos = Math.round((n.nivel / 100) * TICKS)
+        return (
+          <div
+            key={n.nota}
+            className={`perf-row ${visible ? 'on' : ''}`}
+            style={{ transitionDelay: `${i * 80}ms` }}
+          >
+            <div className="perf-row-top">
+              <span className="perf-name">{n.nota}</span>
+              <span className="perf-val">{String(n.nivel).padStart(2, '0')}<em>/100</em></span>
+            </div>
+
+            <div className="perf-ticks" role="img" aria-label={`${n.nota}: ${n.nivel} de 100`}>
+              {Array.from({ length: TICKS }, (_, t) => (
+                <i
+                  key={t}
+                  className={`tick${t < activos ? ' full' : ''}`}
+                  style={{ transitionDelay: `${i * 80 + t * 12}ms` }}
+                />
+              ))}
             </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
