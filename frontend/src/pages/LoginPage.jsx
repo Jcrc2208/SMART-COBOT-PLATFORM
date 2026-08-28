@@ -33,21 +33,21 @@ const STICKER_COUNT = STICKERS.length
 const STEPS = [
   {
     title: 'Diagnóstico',
-    text: 'Conversa con nuestro asistente inteligente sobre tus gustos y aversiones, tu estilo de vida y las emociones que quieres transmitir. A partir de esta charla se construye tu perfil olfativo personal: el punto de partida para encontrar el aroma que de verdad te representa.',
+    text: 'Hablas con nuestra inteligencia artificial sobre tus gustos, estilo de vida y emociones para crear tu perfil olfativo.',
   },
   {
     title: 'Receta única',
-    text: 'Nuestro motor de IA analiza tu perfil y selecciona, entre miles de combinaciones, las notas de salida, corazón y fondo que mejor se ajustan a ti. El resultado es una fórmula 100% personalizada, pensada para que ningún otro perfume del mundo sea igual al tuyo.',
+    text: 'La  inteligencia artificial procesa tu perfil y diseña una fórmula 100% personalizada e irrepetible.',
   },
   {
     title: 'Mezcla',
-    text: 'El robot colaborativo recibe la fórmula y trabaja con precisión milimétrica: dosifica cada esencia, respeta los tiempos de maduración y agita la mezcla para lograr la integración perfecta de todos los ingredientes, garantizando consistencia y calidad en cada gota.',
+    text: 'El cobot dosifica y mezcla cada esencia con precisión milimétrica para lograr la máxima calidad.',
   },
   {
     title: 'Tu aroma listo',
-    text: 'Cuando la mezcla alcanza su punto óptimo, envasamos tu fragancia en una botella de edición numerada y la preparamos para entregarte. Solo tienes que desenroscar la tapa y dejar que tu aroma único, creado y fabricado solo para ti, hable por sí mismo.',
+    text: 'Envasamos tu fragancia en una botella, lista para que disfrutes de un perfume hecho solo para ti.',
   },
-]
+];
 
 export default function LoginPage() {
   const { user } = useAuth()

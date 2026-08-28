@@ -1,10 +1,13 @@
 /* ---------- Tema claro / fondo blanco ---------- */
 
 .chat-page:has(.coleccion.panel) {
+  height: auto;
+  min-height: 100vh;
   background: #fff;
   color: #1a1a1a;
 }
 
+html:has(.chat-page:has(.coleccion.panel)),
 body:has(.chat-page:has(.coleccion.panel)) {
   background: #fff;
 }
