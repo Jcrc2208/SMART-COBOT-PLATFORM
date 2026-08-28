@@ -55,10 +55,28 @@ export default function LoginPage() {
    const sceneRef = useRef(null)
   const spaceRef = useRef(null)
   const aromasRef = useRef(null)
+  const aromasRowRef = useRef(null)
   const frameRef = useRef(null)
   const stickerRefs = useRef([])
   const loginTitleRef = useRef(null)
   const stepRefs = useRef([])
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return
+        const cards = aromasRowRef.current?.querySelectorAll('.aroma-card')
+        cards?.forEach((card, i) => {
+          card.style.transitionDelay = `${i * 120}ms`
+          card.classList.add('in')
+        })
+        obs.disconnect()
+      },
+      { threshold: 0.15 }
+    )
+    if (aromasRowRef.current) obs.observe(aromasRowRef.current)
+    return () => obs.disconnect()
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -227,7 +245,7 @@ STICKERS.forEach((s, i) => {
       <section className="aromas-zone" ref={aromasRef}>
         <p className="block-tag">Aromas</p>
         <h2 className="how-title">Nuestras fragancias</h2>
-        <div className="aromas-row">
+        <div className="aromas-row" ref={aromasRowRef}>
           {[
             {
               img: florales,
@@ -251,7 +269,9 @@ STICKERS.forEach((s, i) => {
             },
           ].map((a) => (
             <div key={a.titulo} className="aroma-card">
-              <img className="aroma-img" src={a.img} alt={a.titulo} />
+              <div className="aroma-img-wrap">
+                <img className="aroma-img" src={a.img} alt={a.titulo} />
+              </div>
               <h4>{a.titulo}</h4>
               <p>{a.text}</p>
             </div>
