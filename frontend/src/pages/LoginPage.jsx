@@ -15,6 +15,12 @@ const FRAMES = Object.keys(frameModules)
   .map((k) => frameModules[k].default)
 const FRAME_COUNT = FRAMES.length
 
+const aromaModules = import.meta.glob('../../images/login/*.png', { eager: true })
+const florales = aromaModules['../../images/login/florales.png'].default
+const citricos = aromaModules['../../images/login/citricos.png'].default
+const amaderados = aromaModules['../../images/login/amaderados.png'].default
+const verdes = aromaModules['../../images/login/verdes.png'].default
+
 const STICKERS = [
   { at: 0 },
   { at: 10 },
@@ -25,10 +31,22 @@ const STICKERS = [
 const STICKER_COUNT = STICKERS.length
 
 const STEPS = [
-  { title: 'Diagnóstico', text: 'Platica con el chatbot sobre tus gustos y define tu perfil olfativo.' },
-  { title: 'Receta única', text: 'La IA procesa tus datos y crea tu fórmula personalizada.' },
-  { title: 'Mezcla ', text: 'El robot colaborativo recibe la fórmula y prepara tu perfume al instante.' },
-  { title: 'Tu aroma listo', text: 'Envasamos tu fragancia única y te la entregamos.' },
+  {
+    title: 'Diagnóstico',
+    text: 'Conversa con nuestro asistente inteligente sobre tus gustos y aversiones, tu estilo de vida y las emociones que quieres transmitir. A partir de esta charla se construye tu perfil olfativo personal: el punto de partida para encontrar el aroma que de verdad te representa.',
+  },
+  {
+    title: 'Receta única',
+    text: 'Nuestro motor de IA analiza tu perfil y selecciona, entre miles de combinaciones, las notas de salida, corazón y fondo que mejor se ajustan a ti. El resultado es una fórmula 100% personalizada, pensada para que ningún otro perfume del mundo sea igual al tuyo.',
+  },
+  {
+    title: 'Mezcla',
+    text: 'El robot colaborativo recibe la fórmula y trabaja con precisión milimétrica: dosifica cada esencia, respeta los tiempos de maduración y agita la mezcla para lograr la integración perfecta de todos los ingredientes, garantizando consistencia y calidad en cada gota.',
+  },
+  {
+    title: 'Tu aroma listo',
+    text: 'Cuando la mezcla alcanza su punto óptimo, envasamos tu fragancia en una botella de edición numerada y la preparamos para entregarte. Solo tienes que desenroscar la tapa y dejar que tu aroma único, creado y fabricado solo para ti, hable por sí mismo.',
+  },
 ]
 
 export default function LoginPage() {
@@ -36,6 +54,7 @@ export default function LoginPage() {
   const [active, setActive] = useState('inicio')
    const sceneRef = useRef(null)
   const spaceRef = useRef(null)
+  const aromasRef = useRef(null)
   const frameRef = useRef(null)
   const stickerRefs = useRef([])
   const loginTitleRef = useRef(null)
@@ -92,6 +111,7 @@ export default function LoginPage() {
     const zones = [
       { trigger: spaceRef.current, name: 'inicio', start: 'top top', end: 'bottom 50%' },
       { trigger: '.how-zone', name: 'descubre', start: 'top 50%', end: 'bottom 50%' },
+      { trigger: aromasRef.current, name: 'aromas', start: 'top 50%', end: 'bottom 50%' },
       { trigger: '.login-zone', name: 'login', start: 'top 50%', end: 'bottom top' },
     ]
     const sts = zones.map(({ trigger, name, start, end }) =>
@@ -158,12 +178,19 @@ STICKERS.forEach((s, i) => {
     document.querySelector('.how-zone')?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const goAromas = (e) => {
+    e.preventDefault()
+    setActive('aromas')
+    aromasRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <div className="login-scroll">
       <header className="login-menu">
         <nav className="menu-links">
           <a href="#" className={active === 'inicio' ? 'active' : ''} onClick={scrollToTop}>Inicio</a>
           <a href="#" className={active === 'descubre' ? 'active' : ''} onClick={goDescubre}>Descubre</a>
+          <a href="#" className={active === 'aromas' ? 'active' : ''} onClick={goAromas}>Aromas</a>
         </nav>
         <a href="#" className={active === 'login' ? 'menu-login active' : 'menu-login'} onClick={scrollToLogin}>
           Empecemos
@@ -192,6 +219,41 @@ STICKERS.forEach((s, i) => {
             >
               <h3>{s.title}</h3>
               <p>{s.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="aromas-zone" ref={aromasRef}>
+        <p className="block-tag">Aromas</p>
+        <h2 className="how-title">Nuestras fragancias</h2>
+        <div className="aromas-row">
+          {[
+            {
+              img: florales,
+              titulo: 'Florales',
+              text: 'La familia más popular. Incluye notas como rosa, jazmín, lavanda, neroli, flor de azahar y peonía.',
+            },
+            {
+              img: citricos,
+              titulo: 'Cítricos y Frescos',
+              text: 'Aportan energía y vitalidad en las notas de salida. Destacan la bergamota, limón, mandarina, pomelo y notas acuáticas o marinas.',
+            },
+            {
+              img: amaderados,
+              titulo: 'Amaderados',
+              text: 'Dan estructura, carácter y durabilidad. Los más recurrentes son sándalo, cedro, vetiver y patchouli.',
+            },
+            {
+              img: verdes,
+              titulo: 'Aromáticos y Verdes',
+              text: 'Frecuentes en perfumería masculina y unisex. Incorporan romero, salvia, menta, albahaca y césped recién cortado.',
+            },
+          ].map((a) => (
+            <div key={a.titulo} className="aroma-card">
+              <img className="aroma-img" src={a.img} alt={a.titulo} />
+              <h4>{a.titulo}</h4>
+              <p>{a.text}</p>
             </div>
           ))}
         </div>
