@@ -25,7 +25,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Navigate to="/perfil" replace />} />
+          <Route index element={<Navigate to="/crear" replace />} />
           <Route path="perfil" element={<Perfil />} />
           <Route path="coleccion" element={<Coleccion />} />
           <Route path="crear" element={<Crear />} />

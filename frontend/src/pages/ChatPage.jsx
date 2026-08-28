@@ -4,9 +4,9 @@ import { useAuth } from '../hooks/useAuth.jsx'
 import './styles/login.css'
 
 const LINKS = [
-  { to: '/perfil', label: 'Perfil' },
-  { to: '/coleccion', label: 'Colección' },
   { to: '/crear', label: 'Crear' },
+  { to: '/coleccion', label: 'Colección' },
+  { to: '/perfil', label: 'Perfil' },
 ]
 
 export default function ChatPage() {
