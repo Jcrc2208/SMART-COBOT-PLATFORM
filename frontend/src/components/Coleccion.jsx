@@ -45,29 +45,6 @@ const NOTAS_PERFIL = [
   { nota: 'Floral', nivel: 70 },
 ]
 
-const NIVELES = [
-  { nombre: 'Novato de Esencias', min: 0 },
-  { nombre: 'Alquimista Aprendiz', min: 3 },
-  { nombre: 'Perfumista Aficionado', min: 6 },
-  { nombre: 'Nariz Experta', min: 10 },
-  { nombre: 'Perfumista Maestro', min: 15 },
-]
-
-function nivelDe(total) {
-  let actual = NIVELES[0]
-  let siguiente = null
-  for (const n of NIVELES) {
-    if (total >= n.min) actual = n
-    else if (!siguiente) siguiente = n
-  }
-  const progreso = siguiente
-    ? (total - actual.min) / (siguiente.min - actual.min)
-    : 1
-  return { ...actual, siguiente, progreso }
-}
-
-const TICKS = 28
-
 function PerfilNotas() {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
@@ -86,7 +63,6 @@ function PerfilNotas() {
       <p className="perf-sheet-title">Ficha olfativa</p>
 
       {NOTAS_PERFIL.map((n, i) => {
-        const activos = Math.round((n.nivel / 100) * TICKS)
         return (
           <div
             key={n.nota}
@@ -98,14 +74,18 @@ function PerfilNotas() {
               <span className="perf-val">{String(n.nivel).padStart(2, '0')}<em>/100</em></span>
             </div>
 
-            <div className="perf-ticks" role="img" aria-label={`${n.nota}: ${n.nivel} de 100`}>
-              {Array.from({ length: TICKS }, (_, t) => (
-                <i
-                  key={t}
-                  className={`tick${t < activos ? ' full' : ''}`}
-                  style={{ transitionDelay: `${i * 80 + t * 12}ms` }}
-                />
-              ))}
+            <div
+              className="perf-bar"
+              role="img"
+              aria-label={`${n.nota}: ${n.nivel} de 100`}
+            >
+              <div
+                className={`perf-bar-fill${visible ? ' on' : ''}`}
+                style={{
+                  '--w': `${n.nivel}%`,
+                  transitionDelay: `${i * 90}ms`,
+                }}
+              />
             </div>
           </div>
         )
@@ -181,8 +161,6 @@ export default function Coleccion() {
     return { familia, pct: Math.round((n / total) * 100) }
   }, [total])
 
-  const nivel = nivelDe(total)
-
   return (
     <main className="panel coleccion">
       <section className="kpi-grid">
@@ -192,20 +170,9 @@ export default function Coleccion() {
         </article>
 
         <article className="kpi-card">
-          <span className="kpi-value">{aromaFirma ? `${aromaFirma.pct}%` : '—'}</span>
+          <span className="kpi-value" style={{ fontSize: '1.3rem' }}>{aromaFirma ? `${aromaFirma.pct}%` : '—'}</span>
           <span className="kpi-label">Aroma firma</span>
           <span className="kpi-extra">{aromaFirma ? aromaFirma.familia : 'Sin datos aún'}</span>
-        </article>
-
-        <article className="kpi-card">
-          <span className="kpi-value" style={{ fontSize: '1.3rem' }}>{nivel.nombre}</span>
-          <span className="kpi-label">Nivel de creador</span>
-          <div className="kpi-level-bar">
-            <div className="kpi-level-fill" style={{ width: `${Math.round(nivel.progreso * 100)}%` }} />
-          </div>
-          <span className="kpi-extra">
-            {nivel.siguiente ? `Siguiente: ${nivel.siguiente.nombre} (${nivel.siguiente.min})` : 'Nivel máximo alcanzado'}
-          </span>
         </article>
       </section>
 

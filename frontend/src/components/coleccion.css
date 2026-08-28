@@ -344,45 +344,32 @@ body:has(.chat-page:has(.coleccion.panel)) {
   font-style: normal;
 }
 
-.perf-ticks {
-  display: flex;
-  align-items: flex-end;
-
-  gap: clamp(2px, 0.6vw, 5px);
-
-  height: 26px;
-}
-
-.tick {
-  flex: 1;
-
-  height: 58%;
+.perf-bar {
+  height: 10px;
 
   background: rgba(0, 0, 0, 0.08);
 
-  border-radius: 1px;
+  border-radius: 999px;
 
-  transform: scaleY(0.45);
-  transform-origin: bottom;
-
-  opacity: 0.5;
-
-  transition:
-    transform 0.35s ease,
-    opacity 0.35s ease,
-    background 0.35s ease;
+  overflow: hidden;
 }
 
-.tick:nth-child(7n + 1) {
+.perf-bar-fill {
   height: 100%;
+
+  width: 0;
+
+  border-radius: inherit;
+
+  background: linear-gradient(90deg, #c9a96e, #f5e2b8);
+
+  box-shadow: 0 1px 2px rgba(201, 169, 110, 0.4);
+
+  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.tick.full {
-  background: linear-gradient(180deg, #f2dfb4, #d4b878);
-
-  transform: scaleY(1);
-
-  opacity: 1;
+.perf-bar-fill.on {
+  width: var(--w);
 }
 
 .empty-msg {

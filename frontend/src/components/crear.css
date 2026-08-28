@@ -258,43 +258,6 @@
 
 
 /* =========================================
-   SIDEBAR BOTTOM
-========================================= */
-
-.sidebar-bottom {
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  min-height: 40px;
-
-  margin-top: auto;
-
-  padding: 0 7px;
-}
-
-.profile-dot {
-  width: 24px;
-  height: 24px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: #3b3b3b;
-}
-
-.profile-text {
-  color: #999;
-
-  font-size: 13px;
-
-  white-space: nowrap;
-}
-
-
-/* =========================================
    CHAT WINDOW
 ========================================= */
 
@@ -923,14 +886,6 @@
 .history-item.active {
   background: rgba(0, 0, 0, 0.08);
   color: #000;
-}
-
-.profile-dot {
-  background: #d0d0d0;
-}
-
-.profile-text {
-  color: #777;
 }
 
 .chat-window {

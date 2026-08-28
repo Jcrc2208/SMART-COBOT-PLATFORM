@@ -281,16 +281,6 @@ export default function Crear() {
             </div>
           </>
         )}
-
-        {/* Indicador inferior */}
-        <div className="sidebar-bottom">
-          <div className="profile-dot" />
-          {sidebarOpen && (
-            <span className="profile-text">
-              Fragance Bar
-            </span>
-          )}
-        </div>
       </aside>
 
       {/* CHAT */}
