@@ -60,8 +60,6 @@ function PerfilNotas() {
 
   return (
     <div className="perfil-wrap" ref={ref}>
-      <p className="perf-sheet-title">Ficha olfativa</p>
-
       {NOTAS_PERFIL.map((n, i) => {
         return (
           <div
