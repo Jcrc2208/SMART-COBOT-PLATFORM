@@ -46,7 +46,7 @@ const STEPS = [
     title: 'Tu aroma listo',
     text: 'Envasamos tu fragancia en una botella, lista para que disfrutes de un perfume hecho solo para ti.',
   },
-];
+]
 
 const AROMAS_DATA = [
   {
@@ -55,7 +55,7 @@ const AROMAS_DATA = [
     titulo: 'Florales',
     text: 'La familia más popular. Incluye notas como rosa, jazmín, lavanda, neroli, flor de azahar y peonía.',
     particleChar: '🌸',
-    glowClass: 'glow-floral'
+    glowClass: 'glow-floral',
   },
   {
     id: 'citricos',
@@ -63,7 +63,7 @@ const AROMAS_DATA = [
     titulo: 'Cítricos y Frescos',
     text: 'Aportan energía y vitalidad en las notas de salida. Destacan la bergamota, limón, mandarina, pomelo y notas acuáticas o marinas.',
     particleChar: '🍋',
-    glowClass: 'glow-citric'
+    glowClass: 'glow-yellow',
   },
   {
     id: 'amaderados',
@@ -71,22 +71,21 @@ const AROMAS_DATA = [
     titulo: 'Amaderados',
     text: 'Dan estructura, carácter y durabilidad. Los más recurrentes son sándalo, cedro, vetiver y patchouli.',
     particleChar: '🪵',
-    glowClass: 'glow-wood'
+    glowClass: 'glow-wood',
   },
   {
     id: 'verdes',
     img: verdes,
     titulo: 'Aromáticos y Verdes',
     text: 'Frecuentes en perfumería masculina y unisex. Incorporan romero, salvia, menta, albahaca y césped recién cortado.',
-    particleChar: '🌿',
-    glowClass: 'glow-green'
+    particleChar: '🍃',
+    glowClass: 'glow-lime',
   },
 ]
 
 export default function LoginPage() {
   const { user } = useAuth()
   const [active, setActive] = useState('inicio')
-  const [selectedAroma, setSelectedAroma] = useState('florales')
 
   const sceneRef = useRef(null)
   const spaceRef = useRef(null)
@@ -252,6 +251,7 @@ export default function LoginPage() {
           Empecemos
         </a>
       </header>
+      
       <div className="scroll-space" ref={spaceRef}>
         <div className="scene" ref={sceneRef}>
           <img className="frame-img" ref={frameRef} alt="" />
@@ -264,6 +264,20 @@ export default function LoginPage() {
       </div>
 
       <section className="how-zone">
+      {/* --- TORMENTA DE PÉTALOS FLOTANTES --- */}
+        <div className="scroll-petals-bg">
+          {[...Array(14)].map((_, idx) => {
+            // Arreglo de emojis variados 
+            const emojis = ['🌸', '🍃', '✨', '🌿', '🌷', '💮', '🍂'];
+            const randomEmoji = emojis[idx % emojis.length];
+            return (
+              <span key={idx} className={`scroll-petal sp-${idx}`}>
+                {randomEmoji}
+              </span>
+            );
+          })
+          }
+        </div>
         <h3 className="block-tag">Descubre</h3>
         <h2 className="how-title">¿Cómo funciona?</h2>
         <div className="how-steps">
@@ -284,34 +298,30 @@ export default function LoginPage() {
         <h3 className="block-tag">Aromas</h3>
         <h2 className="how-title">Nuestros Aromas</h2>
         <div className="aromas-row" ref={aromasRowRef}>
-          {AROMAS_DATA.map((a) => {
-            const isSelected = selectedAroma === a.id
-            return (
-              <div 
-                key={a.id} 
-                className={`aroma-card ${isSelected ? 'selected ' + a.glowClass : ''}`}
-                onClick={() => setSelectedAroma(a.id)}
-              >
-                {/* Partículas flotantes alrededor de la tarjeta */}
-                <div className="particle-container">
-                  {[...Array(6)].map((_, idx) => (
-                    <span 
-                      key={idx} 
-                      className={`floating-particle p-${idx}`}
-                    >
-                      {a.particleChar}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="aroma-img-wrap">
-                  <img className="aroma-img" src={a.img} alt={a.titulo} />
-                </div>
-                <h4>{a.titulo}</h4>
-                <p>{a.text}</p>
+          {AROMAS_DATA.map((a) => (
+            <div 
+              key={a.id} 
+              className={`aroma-card selected ${a.glowClass}`}
+            >
+              {/* Partículas flotantes activas permanentemente */}
+              <div className="particle-container">
+                {[...Array(6)].map((_, idx) => (
+                  <span 
+                    key={idx} 
+                    className={`floating-particle p-${idx}`}
+                  >
+                    {a.particleChar}
+                  </span>
+                ))}
               </div>
-            )
-          })}
+
+              <div className="aroma-img-wrap">
+                <img className="aroma-img" src={a.img} alt={a.titulo} />
+              </div>
+              <h4>{a.titulo}</h4>
+              <p>{a.text}</p>
+            </div>
+          ))}
         </div>
       </section>
 

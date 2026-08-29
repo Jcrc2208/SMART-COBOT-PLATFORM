@@ -349,12 +349,14 @@
   margin-top: 48px;
 }
 
+/* --- TARJETA BASE UNificada --- */
 .aroma-card {
+  position: relative;
   background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(0, 0, 0, 0.08);
   border-radius: 20px;
   padding: 0 0 24px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow:
     0 12px 32px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -364,16 +366,17 @@
   gap: 10px;
   opacity: 0;
   transform: translateY(28px) scale(0.96);
+  cursor: pointer;
   transition:
     opacity 0.6s ease,
-    transform 0.6s ease,
+    transform 0.35s ease,
     box-shadow 0.35s ease,
     border-color 0.35s ease;
 }
 
 .aroma-card.in {
   opacity: 1;
-  transform: none;
+  transform: translateY(0) scale(1);
 }
 
 .aroma-card:hover {
@@ -385,6 +388,8 @@
 
 .aroma-img-wrap {
   overflow: hidden;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
 }
 
 .aroma-img {
@@ -429,44 +434,30 @@
   font-size: 0.9rem;
   line-height: 1.55;
 }
-
-/* Contenedor de tarjeta con posición relativa para las partículas */
-.aroma-card {
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  border-radius: 16px;
-  background: #fff;
-  overflow: visible; /* Permitir que las partículas salgan un poco del borde */
-}
-
-.aroma-card:hover {
-  transform: translateY(-5px);
-}
-
-/* Efectos de Halo / Borde brillante al seleccionar */
+/* ==========================================
+   EFECTOS DE HALO / BRILLO AL SELECCIONAR
+   ========================================== */
 .aroma-card.selected.glow-floral {
-  border-color: #d8b4fe;
-  box-shadow: 0 0 20px rgba(216, 180, 254, 0.6), inset 0 0 15px rgba(216, 180, 254, 0.3);
+  border-color: #d8b4fe !important;
+  box-shadow: 0 0 20px rgba(216, 180, 254, 0.6), inset 0 0 15px rgba(216, 180, 254, 0.3) !important;
 }
-
-.aroma-card.selected.glow-citric {
-  border-color: #fde047;
-  box-shadow: 0 0 20px rgba(253, 224, 71, 0.6), inset 0 0 15px rgba(253, 224, 71, 0.3);
+.aroma-card.selected.glow-yellow {
+  border-color: #fde047 !important;
+  box-shadow: 0 0 20px rgba(253, 224, 71, 0.6), inset 0 0 15px rgba(253, 224, 71, 0.3) !important;
 }
-
 .aroma-card.selected.glow-wood {
-  border-color: #d97706;
-  box-shadow: 0 0 20px rgba(217, 119, 6, 0.6), inset 0 0 15px rgba(217, 119, 6, 0.3);
+  border-color: #d97706 !important;
+  box-shadow: 0 0 20px rgba(217, 119, 6, 0.6), inset 0 0 15px rgba(217, 119, 6, 0.3) !important;
 }
 
-.aroma-card.selected.glow-green {
-  border-color: #4ade80;
-  box-shadow: 0 0 20px rgba(74, 222, 128, 0.6), inset 0 0 15px rgba(74, 222, 128, 0.3);
+.aroma-card.selected.glow-lime {
+  border-color: #84cc16 !important;
+  box-shadow: 0 0 20px rgba(132, 204, 22, 0.6), inset 0 0 15px rgba(132, 204, 22, 0.3) !important;
 }
 
-/* Contenedor y Animación de Partículas */
+/* ==========================================
+   CONTENEDOR Y ANIMACIÓN DE PARTICULAS FIJAS
+   ========================================== */
 .particle-container {
   position: absolute;
   top: -15px;
@@ -475,13 +466,8 @@
   bottom: -15px;
   pointer-events: none;
   z-index: 10;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-/* Solo mostramos partículas intensas si la tarjeta está seleccionada */
-.aroma-card.selected .particle-container {
-  opacity: 1;
+  opacity: 1; /* Visibles siempre */
+  visibility: visible;
 }
 
 .floating-particle {
@@ -491,13 +477,13 @@
   opacity: 0;
 }
 
-/* Animación individual dispersa para las partículas */
-.aroma-card.selected .floating-particle.p-0 { top: 0%; left: 10%; animation-delay: 0s; }
-.aroma-card.selected .floating-particle.p-1 { top: 10%; right: 5%; animation-delay: 0.5s; }
-.aroma-card.selected .floating-particle.p-2 { bottom: 5%; left: 15%; animation-delay: 1s; }
-.aroma-card.selected .floating-particle.p-3 { bottom: 10%; right: 10%; animation-delay: 1.5s; }
-.aroma-card.selected .floating-particle.p-4 { top: 50%; left: -10px; animation-delay: 0.8s; }
-.aroma-card.selected .floating-particle.p-5 { top: 40%; right: -10px; animation-delay: 1.2s; }
+/* Activación directa para todas las tarjetas */
+.aroma-card .floating-particle.p-0 { top: 0%; left: 10%; animation-delay: 0s; }
+.aroma-card .floating-particle.p-1 { top: 10%; right: 5%; animation-delay: 0.5s; }
+.aroma-card .floating-particle.p-2 { bottom: 5%; left: 15%; animation-delay: 1s; }
+.aroma-card .floating-particle.p-3 { bottom: 10%; right: 10%; animation-delay: 1.5s; }
+.aroma-card .floating-particle.p-4 { top: 50%; left: -10px; animation-delay: 0.8s; }
+.aroma-card .floating-particle.p-5 { top: 40%; right: -10px; animation-delay: 1.2s; }
 
 @keyframes floatParticle {
   0% {
@@ -508,7 +494,67 @@
     opacity: 1;
   }
   100% {
-    transform: translate(var(--tx, 20px), var(--ty, -30px)) scale(1.2) rotate(45deg);
+    transform: translate(20px, -30px) scale(1.2) rotate(45deg);
     opacity: 0;
+  }
+}
+
+
+/* ==========================================
+   TORMENTA DE PÉTALOS CON EFECTO DE VIENTO REAL
+   ========================================== */
+.how-zone {
+  position: relative;
+  overflow: hidden; 
+}
+
+.scroll-petals-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scroll-petal {
+  position: absolute;
+  font-size: 1.4rem;
+  opacity: 0.3;
+  animation: windDrift 8s ease-in-out infinite;
+}
+
+/* Posiciones, tamaños y velocidades distribuidas para los 14 elementos */
+.scroll-petal.sp-0  { top: 5%; left: 4%; animation-delay: 0s; animation-duration: 7s; font-size: 1.6rem; }
+.scroll-petal.sp-1  { top: 15%; right: 7%; animation-delay: 1.2s; animation-duration: 9s; font-size: 1.2rem; }
+.scroll-petal.sp-2  { top: 25%; left: 12%; animation-delay: 2.5s; animation-duration: 6.5s; }
+.scroll-petal.sp-3  { top: 35%; right: 15%; animation-delay: 0.5s; animation-duration: 8.5s; font-size: 1.8rem; }
+.scroll-petal.sp-4  { top: 45%; left: 8%; animation-delay: 3.2s; animation-duration: 10s; }
+.scroll-petal.sp-5  { top: 55%; right: 10%; animation-delay: 1.8s; animation-duration: 7.5s; font-size: 1.1rem; }
+.scroll-petal.sp-6  { top: 65%; left: 18%; animation-delay: 4s; animation-duration: 9.5s; }
+.scroll-petal.sp-7  { top: 75%; right: 5%; animation-delay: 0.9s; animation-duration: 6s; font-size: 1.5rem; }
+.scroll-petal.sp-8  { top: 85%; left: 6%; animation-delay: 2.1s; animation-duration: 8s; }
+.scroll-petal.sp-9  { top: 92%; right: 18%; animation-delay: 3.5s; animation-duration: 7s; font-size: 1.3rem; }
+.scroll-petal.sp-10 { top: 20%; left: 50%; animation-delay: 1.6s; animation-duration: 11s; }
+.scroll-petal.sp-11 { top: 50%; left: 45%; animation-delay: 2.8s; animation-duration: 8.2s; font-size: 1.7rem; }
+.scroll-petal.sp-12 { top: 70%; left: 55%; animation-delay: 0.3s; animation-duration: 9.1s; }
+.scroll-petal.sp-13 { top: 88%; left: 48%; animation-delay: 4.2s; animation-duration: 6.8s; font-size: 1.2rem; }
+
+@keyframes windDrift {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg) scale(0.8);
+  }
+  25% {
+    transform: translate(45px, -30px) rotate(60deg) scale(1.15);
+  }
+  50% {
+    transform: translate(-30px, -60px) rotate(120deg) scale(0.9);
+  }
+  75% {
+    transform: translate(35px, -25px) rotate(200deg) scale(1.1);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(360deg) scale(0.8);
   }
 }
