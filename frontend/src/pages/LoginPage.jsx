@@ -264,7 +264,7 @@ export default function LoginPage() {
       </div>
 
       <section className="how-zone">
-        <p className="block-tag">Descubre</p>
+        <h3 className="block-tag">Descubre</h3>
         <h2 className="how-title">¿Cómo funciona?</h2>
         <div className="how-steps">
           {STEPS.map((s, i) => (
@@ -281,8 +281,8 @@ export default function LoginPage() {
       </section>
 
       <section className="aromas-zone" ref={aromasRef}>
-        <p className="block-tag">Aromas</p>
-        <h2 className="how-title">Nuestras fragancias</h2>
+        <h3 className="block-tag">Aromas</h3>
+        <h2 className="how-title">Nuestros Aromas</h2>
         <div className="aromas-row" ref={aromasRowRef}>
           {AROMAS_DATA.map((a) => {
             const isSelected = selectedAroma === a.id
