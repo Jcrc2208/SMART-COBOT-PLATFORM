@@ -419,3 +419,86 @@
   font-size: 0.9rem;
   line-height: 1.55;
 }
+
+/* Contenedor de tarjeta con posición relativa para las partículas */
+.aroma-card {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background: #fff;
+  overflow: visible; /* Permitir que las partículas salgan un poco del borde */
+}
+
+.aroma-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Efectos de Halo / Borde brillante al seleccionar */
+.aroma-card.selected.glow-floral {
+  border-color: #d8b4fe;
+  box-shadow: 0 0 20px rgba(216, 180, 254, 0.6), inset 0 0 15px rgba(216, 180, 254, 0.3);
+}
+
+.aroma-card.selected.glow-citric {
+  border-color: #fde047;
+  box-shadow: 0 0 20px rgba(253, 224, 71, 0.6), inset 0 0 15px rgba(253, 224, 71, 0.3);
+}
+
+.aroma-card.selected.glow-wood {
+  border-color: #d97706;
+  box-shadow: 0 0 20px rgba(217, 119, 6, 0.6), inset 0 0 15px rgba(217, 119, 6, 0.3);
+}
+
+.aroma-card.selected.glow-green {
+  border-color: #4ade80;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.6), inset 0 0 15px rgba(74, 222, 128, 0.3);
+}
+
+/* Contenedor y Animación de Partículas */
+.particle-container {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Solo mostramos partículas intensas si la tarjeta está seleccionada */
+.aroma-card.selected .particle-container {
+  opacity: 1;
+}
+
+.floating-particle {
+  position: absolute;
+  font-size: 1.2rem;
+  animation: floatParticle 3s ease-in-out infinite;
+  opacity: 0;
+}
+
+/* Animación individual dispersa para las partículas */
+.aroma-card.selected .floating-particle.p-0 { top: 0%; left: 10%; animation-delay: 0s; }
+.aroma-card.selected .floating-particle.p-1 { top: 10%; right: 5%; animation-delay: 0.5s; }
+.aroma-card.selected .floating-particle.p-2 { bottom: 5%; left: 15%; animation-delay: 1s; }
+.aroma-card.selected .floating-particle.p-3 { bottom: 10%; right: 10%; animation-delay: 1.5s; }
+.aroma-card.selected .floating-particle.p-4 { top: 50%; left: -10px; animation-delay: 0.8s; }
+.aroma-card.selected .floating-particle.p-5 { top: 40%; right: -10px; animation-delay: 1.2s; }
+
+@keyframes floatParticle {
+  0% {
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx, 20px), var(--ty, -30px)) scale(1.2) rotate(45deg);
+    opacity: 0;
+  }
+}

@@ -16,10 +16,10 @@ const FRAMES = Object.keys(frameModules)
 const FRAME_COUNT = FRAMES.length
 
 const aromaModules = import.meta.glob('../../images/login/*.png', { eager: true })
-const florales = aromaModules['../../images/login/florales.png'].default
-const citricos = aromaModules['../../images/login/citricos.png'].default
-const amaderados = aromaModules['../../images/login/amaderados.png'].default
-const verdes = aromaModules['../../images/login/verdes.png'].default
+const florales = aromaModules['../../images/login/florales.png']?.default || ''
+const citricos = aromaModules['../../images/login/citricos.png']?.default || ''
+const amaderados = aromaModules['../../images/login/amaderados.png']?.default || ''
+const verdes = aromaModules['../../images/login/verdes.png']?.default || ''
 
 const STICKERS = [
   { at: 0 },
@@ -28,7 +28,6 @@ const STICKERS = [
   { at: 30 },
   { at: 40 },
 ]
-const STICKER_COUNT = STICKERS.length
 
 const STEPS = [
   {
@@ -37,7 +36,7 @@ const STEPS = [
   },
   {
     title: 'Receta única',
-    text: 'La  inteligencia artificial procesa tu perfil y diseña una fórmula 100% personalizada e irrepetible.',
+    text: 'La inteligencia artificial procesa tu perfil y diseña una fórmula 100% personalizada e irrepetible.',
   },
   {
     title: 'Mezcla',
@@ -49,10 +48,47 @@ const STEPS = [
   },
 ];
 
+const AROMAS_DATA = [
+  {
+    id: 'florales',
+    img: florales,
+    titulo: 'Florales',
+    text: 'La familia más popular. Incluye notas como rosa, jazmín, lavanda, neroli, flor de azahar y peonía.',
+    particleChar: '🌸',
+    glowClass: 'glow-floral'
+  },
+  {
+    id: 'citricos',
+    img: citricos,
+    titulo: 'Cítricos y Frescos',
+    text: 'Aportan energía y vitalidad en las notas de salida. Destacan la bergamota, limón, mandarina, pomelo y notas acuáticas o marinas.',
+    particleChar: '🍋',
+    glowClass: 'glow-citric'
+  },
+  {
+    id: 'amaderados',
+    img: amaderados,
+    titulo: 'Amaderados',
+    text: 'Dan estructura, carácter y durabilidad. Los más recurrentes son sándalo, cedro, vetiver y patchouli.',
+    particleChar: '🪵',
+    glowClass: 'glow-wood'
+  },
+  {
+    id: 'verdes',
+    img: verdes,
+    titulo: 'Aromáticos y Verdes',
+    text: 'Frecuentes en perfumería masculina y unisex. Incorporan romero, salvia, menta, albahaca y césped recién cortado.',
+    particleChar: '🌿',
+    glowClass: 'glow-green'
+  },
+]
+
 export default function LoginPage() {
   const { user } = useAuth()
   const [active, setActive] = useState('inicio')
-   const sceneRef = useRef(null)
+  const [selectedAroma, setSelectedAroma] = useState('florales')
+
+  const sceneRef = useRef(null)
   const spaceRef = useRef(null)
   const aromasRef = useRef(null)
   const aromasRowRef = useRef(null)
@@ -145,7 +181,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     let lastIdx = 0
-    frameRef.current.src = FRAMES[0]
+    if (frameRef.current && FRAMES.length > 0) {
+      frameRef.current.src = FRAMES[0]
+    }
     const st = ScrollTrigger.create({
       trigger: spaceRef.current,
       start: 'top top',
@@ -154,11 +192,11 @@ export default function LoginPage() {
       onUpdate: (self) => {
         const p = self.progress
         const idx = Math.min(FRAME_COUNT - 1, Math.round(p * (FRAME_COUNT - 1)))
-        if (idx !== lastIdx) {
+        if (idx !== lastIdx && frameRef.current) {
           lastIdx = idx
           frameRef.current.src = FRAMES[idx]
         }
-STICKERS.forEach((s, i) => {
+        STICKERS.forEach((s, i) => {
           const el = stickerRefs.current[i]
           if (!el) return
           const target = s.at / Math.max(1, FRAME_COUNT - 1)
@@ -246,36 +284,34 @@ STICKERS.forEach((s, i) => {
         <p className="block-tag">Aromas</p>
         <h2 className="how-title">Nuestras fragancias</h2>
         <div className="aromas-row" ref={aromasRowRef}>
-          {[
-            {
-              img: florales,
-              titulo: 'Florales',
-              text: 'La familia más popular. Incluye notas como rosa, jazmín, lavanda, neroli, flor de azahar y peonía.',
-            },
-            {
-              img: citricos,
-              titulo: 'Cítricos y Frescos',
-              text: 'Aportan energía y vitalidad en las notas de salida. Destacan la bergamota, limón, mandarina, pomelo y notas acuáticas o marinas.',
-            },
-            {
-              img: amaderados,
-              titulo: 'Amaderados',
-              text: 'Dan estructura, carácter y durabilidad. Los más recurrentes son sándalo, cedro, vetiver y patchouli.',
-            },
-            {
-              img: verdes,
-              titulo: 'Aromáticos y Verdes',
-              text: 'Frecuentes en perfumería masculina y unisex. Incorporan romero, salvia, menta, albahaca y césped recién cortado.',
-            },
-          ].map((a) => (
-            <div key={a.titulo} className="aroma-card">
-              <div className="aroma-img-wrap">
-                <img className="aroma-img" src={a.img} alt={a.titulo} />
+          {AROMAS_DATA.map((a) => {
+            const isSelected = selectedAroma === a.id
+            return (
+              <div 
+                key={a.id} 
+                className={`aroma-card ${isSelected ? 'selected ' + a.glowClass : ''}`}
+                onClick={() => setSelectedAroma(a.id)}
+              >
+                {/* Partículas flotantes alrededor de la tarjeta */}
+                <div className="particle-container">
+                  {[...Array(6)].map((_, idx) => (
+                    <span 
+                      key={idx} 
+                      className={`floating-particle p-${idx}`}
+                    >
+                      {a.particleChar}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="aroma-img-wrap">
+                  <img className="aroma-img" src={a.img} alt={a.titulo} />
+                </div>
+                <h4>{a.titulo}</h4>
+                <p>{a.text}</p>
               </div>
-              <h4>{a.titulo}</h4>
-              <p>{a.text}</p>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </section>
 
