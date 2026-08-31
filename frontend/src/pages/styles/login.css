@@ -342,11 +342,49 @@
 }
 
 .aromas-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  display: flex;
   gap: 24px;
-  width: min(960px, 100%);
+  width: min(1400px, 100%);
   margin-top: 48px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 0 24px;
+}
+
+.aromas-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.aromas-row::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.aromas-row .aroma-card {
+  flex: 0 0 calc(100% / 6 - 20px);
+  min-width: 240px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+  .aromas-zone {
+    min-height: auto;
+    height: auto;
+    padding-bottom: 48px;
+  }
+
+  .aromas-row {
+    gap: 16px;
+    width: 100%;
+    margin-top: 32px;
+    padding: 12px 8vw 24px;
+  }
+
+  .aromas-row .aroma-card {
+    flex: 0 0 calc(50% - 8px);
+    min-width: calc(50% - 8px);
+  }
 }
 
 /* --- TARJETA BASE UNificada --- */
