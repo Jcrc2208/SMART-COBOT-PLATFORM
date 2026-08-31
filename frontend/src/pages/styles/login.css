@@ -232,9 +232,19 @@
 }
 
 .login-zone,
-.how-zone,
-.aromas-zone {
+.how-zone {
   min-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  padding: 48px 8vw;
+}
+
+.aromas-zone {
   background: #fff;
   display: flex;
   flex-direction: column;
