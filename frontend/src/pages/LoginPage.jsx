@@ -266,7 +266,7 @@ export default function LoginPage() {
       <section className="how-zone">
       {/* --- TORMENTA DE PÉTALOS FLOTANTES --- */}
         <div className="scroll-petals-bg">
-          {[...Array(14)].map((_, idx) => {
+          {[...Array(24)].map((_, idx) => {
             // Arreglo de emojis variados 
             const emojis = ['🌸', '🍃', '✨', '🌿', '🌷', '💮', '🍂'];
             const randomEmoji = emojis[idx % emojis.length];
