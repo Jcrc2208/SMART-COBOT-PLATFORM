@@ -349,16 +349,19 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
   padding: 12px 0 24px;
 }
 
 .aromas-row::-webkit-scrollbar {
   height: 4px;
+  display: none;
 }
 
 .aromas-row::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 4px;
+  display: none;
 }
 
 .aromas-row .aroma-card {
@@ -379,6 +382,11 @@
     width: 100%;
     margin-top: 32px;
     padding: 12px 8vw 24px;
+    scrollbar-width: none;
+  }
+
+  .aromas-row::-webkit-scrollbar {
+    display: none;
   }
 
   .aromas-row .aroma-card {

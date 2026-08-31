@@ -5,6 +5,7 @@ import './styles/login.css'
 
 const LINKS = [
   { to: '/crear', label: 'Crear' },
+  { to: '/catalogo', label: 'Catálogo' },
   { to: '/coleccion', label: 'Colección' },
   { to: '/perfil', label: 'Perfil' },
 ]
