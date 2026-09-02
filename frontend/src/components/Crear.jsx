@@ -1,5 +1,47 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import './crear.css'
+
+const splitIntoSentences = (text) =>
+  text
+    .split(/(?<=[.!?…])\s+|\n+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 1)
+
+const pickSpanishVoice = () => {
+  const voices = window.speechSynthesis?.getVoices() ?? []
+  if (!voices.length) return null
+
+  const score = (v) => {
+    const name = (v.name || '').toLowerCase()
+    let s = 0
+    if (v.lang === 'es-ES') s += 10
+    else if (v.lang.startsWith('es')) s += 8
+    if (v.default) s += 3
+    if (name.includes('natural') || name.includes('neural')) s += 5
+    if (name.includes('micr')) s += 2
+    return s
+  }
+
+  return [...voices].sort((a, b) => score(b) - score(a))[0]
+}
+
+const speakQueue = (text, { muted, rate = 0.98 } = {}) => {
+  if (muted || !('speechSynthesis' in window)) return
+  const synth = window.speechSynthesis
+  synth.cancel()
+
+  const voice = pickSpanishVoice()
+
+  const parts = splitIntoSentences(text)
+  parts.forEach((part) => {
+    const u = new SpeechSynthesisUtterance(part)
+    if (voice) u.voice = voice
+    u.lang = voice?.lang || 'es-ES'
+    u.rate = rate
+    u.pitch = 1.02
+    synth.speak(u)
+  })
+}
 
 const newConversation = () => ({
   id: Date.now() + Math.random(),
@@ -12,9 +54,42 @@ export default function Crear() {
   const [activeId, setActiveId] = useState(convs[0].id)
   const [input, setInput] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [muted, setMuted] = useState(false)
   const listRef = useRef(null)
 
   const active = convs.find((c) => c.id === activeId) ?? convs[0]
+
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices()
+    }
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
+
+  const stopSpeech = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+    }
+  }
+
+  const playMessage = useCallback(
+    (text) => {
+      speakQueue(text, { muted })
+    },
+    [muted]
+  )
+
+  useEffect(() => {
+    const last = active.messages[active.messages.length - 1]
+    if (last && last.from === 'bot' && last.speaking !== false) {
+      speakQueue(last.text, { muted })
+    }
+  }, [active.messages.length, muted, playMessage])
 
   useEffect(() => {
     if (active.messages.length > 0) {
@@ -25,34 +100,56 @@ export default function Crear() {
     }
   }, [active.messages.length])
 
-  const send = () => {
+  const send = async () => {
     const msg = input.trim()
-    if (!msg) return
+    if (!msg || loading) return
 
     setInput('')
+
+    const userMsg = { from: 'user', text: msg }
 
     setConvs((cs) =>
       cs.map((c) =>
         c.id === active.id
           ? {
               ...c,
-              title:
-                c.messages.length === 0
-                  ? msg.slice(0, 32)
-                  : c.title,
-              messages: [
-                ...c.messages,
-                {
-                  from: 'user',
-                  text: msg,
-                },
-              ],
+              title: c.messages.length === 0 ? msg.slice(0, 32) : c.title,
+              messages: [...c.messages, userMsg],
             }
           : c
       )
     )
 
-    setTimeout(() => {
+    setLoading(true)
+
+    try {
+      const currentConvs = [...convs]
+      const current = currentConvs.find((c) => c.id === active.id)
+      const history = (current?.messages ?? []).map((m) => ({
+        role: m.from === 'user' ? 'user' : 'assistant',
+        content: m.text,
+      }))
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, history }),
+      })
+
+      const data = await res.json()
+      const reply = data.reply || 'No pude generar una respuesta. Intenta de nuevo.'
+
+      setConvs((cs) =>
+        cs.map((c) =>
+          c.id === active.id
+            ? {
+                ...c,
+                messages: [...c.messages, { from: 'bot', text: reply }],
+              }
+            : c
+        )
+      )
+    } catch {
       setConvs((cs) =>
         cs.map((c) =>
           c.id === active.id
@@ -60,16 +157,15 @@ export default function Crear() {
                 ...c,
                 messages: [
                   ...c.messages,
-                  {
-                    from: 'bot',
-                    text: 'Perfecto, estoy preparando tu fórmula…',
-                  },
+                  { from: 'bot', text: 'Error de conexión con el servidor. Intenta de nuevo.' },
                 ],
               }
             : c
         )
       )
-    }, 600)
+    }
+
+    setLoading(false)
   }
 
   const startNewChat = () => {
@@ -121,9 +217,10 @@ export default function Crear() {
         <input
           type="text"
           className="chat-input"
-          placeholder="Describe tu aroma ideal..."
+          placeholder={loading ? 'Esperando respuesta...' : 'Describe tu aroma ideal...'}
           value={input}
           autoFocus
+          disabled={loading}
           onChange={(e) =>
             setInput(e.target.value)
           }
@@ -132,8 +229,9 @@ export default function Crear() {
         <button
           type="submit"
           className={`chat-send ${
-            input.trim() ? 'active' : ''
+            input.trim() && !loading ? 'active' : ''
           }`}
+          disabled={loading || !input.trim()}
           aria-label="Enviar"
         >
           <svg
@@ -286,6 +384,46 @@ export default function Crear() {
       {/* CHAT */}
       <section className="chat-window">
 
+        {/* Control de voz */}
+        <button
+          type="button"
+          className={`voice-toggle ${muted ? 'muted' : ''}`}
+          onClick={() => {
+            setMuted((m) => !m)
+            stopSpeech()
+          }}
+          aria-label={muted ? 'Activar voz' : 'Silenciar voz'}
+          title={muted ? 'Activar voz' : 'Silenciar voz'}
+        >
+          {muted ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M11 5 6 9H3v6h3l5 4V5Z"
+                fill="currentColor"
+              />
+              <path
+                d="m16 9 4 6M20 9l-4 6"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M11 5 6 9H3v6h3l5 4V5Z"
+                fill="currentColor"
+              />
+              <path
+                d="M15 9a4 4 0 0 1 0 6M17.5 6.5a8 8 0 0 1 0 11"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          )}
+        </button>
+
         {/* Mensajes */}
         <div
           className={`chat-messages ${
@@ -319,8 +457,43 @@ export default function Crear() {
               }`}
             >
               {m.text}
+
+              {m.from === 'bot' && (
+                <button
+                  type="button"
+                  className="msg-voice"
+                  aria-label="Reproducir mensaje"
+                  onClick={() => playMessage(m.text)}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M11 5 6 9H3v6h3l5 4V5Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M15 9a4 4 0 0 1 0 6M17.5 6.5a8 8 0 0 1 0 11"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              )}
             </div>
           ))}
+
+          {loading && (
+            <div className="msg msg-bot typing">
+              <span className="dot" />
+              <span className="dot" />
+              <span className="dot" />
+            </div>
+          )}
         </div>
 
         {hasMessages && renderInput()}
